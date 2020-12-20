@@ -1,0 +1,221 @@
+
+<!doctype html>
+<html>
+<head>
+    <title>驗證表單</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type= "text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    
+    <!--定義css部分-->
+    <style>
+        
+        /*設置背景*/
+        body
+        {
+            background-color: #F2F3F5;
+        }
+        
+        /*設置容器container位置*/
+        #container
+        {
+        	/*離頂端邊距離*/
+        	padding-top:60px;
+        	/*寬度*/
+            width:600px;
+            /*位置置中*/
+            margin:auto;
+            /*字體(放三種字體是為了以防瀏覽器沒有支援某一字體)*/
+            font-family:"Helvetica Neue", "Helvetica", "Arial";
+        }
+        
+        /*設置集中管理的class部分*/
+        .input-style
+        {
+        	/*添加圓角*/
+            border-radius:5px;
+            /*邊框粗細及顏色*/
+            border:1px solid grey;
+            /*輸入的文字大小*/
+            font-size:1.1em;
+            /*內部輸入的空間與左邊寬的距離*/
+            padding-left:20px;
+            /*外部邊距*/
+            margin-bottom:10px;
+        }
+        
+        /*控制input的框的寬度高度*/
+        .input-width
+        {
+        	width:300px;
+            height:40px;
+        }
+        
+        /*控制mail-gender的顯示位置*/
+        #mail-gender
+        {
+        	/*框框的寬高相對應input的部分，所以設置一樣*/
+            /*但會發現寬度mail-gender部分還是比其他短*/
+            /*以網頁原始碼來看會發現input的總寬度為323px，所以將width改為323*/
+            width:323px;
+            height:40px;
+        }
+        
+        
+        /*為label標籤以及輸入框定義不同外觀*/
+        label
+        {
+        	width:200px;
+            /*利用向左對齊，讓每一個labe設置換行動作*/
+            float:left;
+            /*放大標籤字體*/
+            font-size:1.2em;
+            /*為了標籤與input的框對齊，曾加上邊距會向下移動*/
+            padding-top:8px;
+        }
+        
+        /*調整mail-message的框框大小*/
+        #mail-message
+        {
+        	width:500px;
+            /*讓框內文字往下一些*/
+            padding-top:15px;
+        }
+        
+        /*調整按鈕*/
+        #submitButton
+        {
+        	background-color: #AA47BC;
+            color:white;
+            width:523px;
+            height:40px;
+        }
+        
+        /*錯誤訊息*/
+        /*#error*/
+        /*{*/
+        /*	color:red;*/
+        /*}*/
+        
+        /*設置錯誤才顯示紅字*/
+        .form-error
+        {
+            color:red;
+        }
+        
+        /*設置正確顯示綠字*/
+        .form-success
+        {
+            color:green;
+        }
+        
+        /*錯誤時，對應的輸入框，會有影子*/
+        .input-error
+        {
+            box-shadow: 0 0 5px red;
+        }
+        
+        
+        
+        
+    </style>
+    
+</head>
+
+<body>
+  
+    <div id = "container">
+        <form id="validationForm" method="post">
+            
+        	<!--標題(for給name用)-->
+            <label for="email-name">姓名</label>
+            <!--輸入框-->
+            <input id="email-name" class="input-style input-width" type="text" name="name" placeholder="輸入姓名"/>
+            
+            <label for="email-address">電子信箱</label>
+            <!--提交按鈕-->
+            <input id="email-address" class="input-style input-width" type="text" name="email" placeholder="輸入信箱"/>
+            
+            <label for="mail-gender">性別</label>
+            <!--提交按鈕-->
+            <select id="mail-gender" class="input-style" name="gender">
+                <option value= "male">男性</option>
+                <option value= "female">女性</option>
+            </select>
+            
+            <label for="pass1">密碼</label>
+            <!--提交按鈕-->
+            <input id="pass1" class="input-style input-width" type="password" name="pass1" placeholder="密碼
+            "/>
+            
+            <label for="pass1">確認密碼</label>
+            <!--提交按鈕-->
+            <input id="pass2" class="input-style input-width" type="password" name="pass2" placeholder="確認密碼
+            "/>
+            
+            <!--發送郵件訊息的地方-->
+            <textarea id="mail-message" class="input-style" name="message" rows="8" cols="80" placeholder="請描述您的狀況"></textarea>
+            
+            <!--按鈕設為提交的作用-->
+            <button id="submitButton" class="input-style" type="submit" name="submit">發送郵件</button>
+            
+        </form>
+        
+        <!--定義錯誤訊息區-->
+        <div id= "error"></div>
+        
+    </div>
+    
+    <!--****************     jquery部分  *****************-->
+    <!--先驗證提交的表單確認無錯誤才會真正送出-->
+    
+    <!--*****利用JQuery及ajax技術處理數據傳遞至PHP部分，就不會更改到本身頁面*****-->
+    
+    <script type = "text/javascript">
+        
+        // 先指向表單，當表單有提交的動作時做檢驗，event作為需驗證的提交事件之參數
+        $("#validationForm").submit(function(event){
+        	
+            
+            
+        	event.preventDefault();
+            
+            // 宣告各個輸入的值
+            var name = $("#email-name").val();
+            var email = $("#email-address").val();
+            var pass1 = $("#pass1").val();
+            var pass2 = $("#pass2").val();
+            var message = $("#mail-message").val();
+            // 宣告提交至PHP的數據(用戶按下提交時需要用到)
+            var submit =  $("#submitButton").val();
+            
+            // 希望PHP會返回一些訊息到error錯誤訊息區裡面，所以指向error裡面
+            // load("文檔",{哪一些數據傳遞過去})
+            $("#error").load("mail.php", {
+            
+            // 	ajax處理傳遞，使用ajax可以在不改變整個網頁的情況下傳遞我們要的東西處理並返回結果
+                // 這邊的name傳遞至php裡面的name，下面以此類推
+                name : name ,
+                email: email,
+                pass1: pass1,
+                pass2: pass2,
+                message: message,
+                submit: submit,
+            
+            });
+            
+        
+        });
+        
+    </script>
+    
+</body>
+</html>
+
+
+
+
+
