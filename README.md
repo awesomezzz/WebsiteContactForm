@@ -1,3 +1,3 @@
 # About WebsiteContactForm
 
-<img src="https://github.com/awesomezzz/WebsiteContactForm/blob/main/demo.png" width="90%" height="90%" />
+<img src="https://github.com/awesomezzz/WebsiteContactForm/blob/main/demo.png" width="70%" height="70%" />
